@@ -1,9 +1,9 @@
 
-# Mini Banking System
+# FinTech System
 
 ## Project Overview
 
-This project implements a basic banking system backend designed for a small fintech startup. It supports multiple transaction types including deposit, withdrawal, and transfer. The system uses in-memory storage and can be extended for future features such as loan accounts, interest calculation, and multi-currency support. This system is intended as a prototype for managing customer accounts and transactions.
+This project implements a basic banking system backend designed for a small fintech startup. It supports multiple transaction types including deposit, withdrawal, and transfer. The system uses in-memory storage and can be extended for future features such as loan accounts and interest calculation. This system is intended as a prototype for managing customer accounts and transactions.
 
 ## Setup Instructions
 
@@ -31,7 +31,7 @@ To run the project locally, follow these steps:
    dotnet run
    ```
 
-   The API will be available on `http://localhost:<port-number>`.
+   The API will be available on `http://localhost:7224`.
 
 ## Design Decisions
 
@@ -46,12 +46,10 @@ The system follows a **Clean Architecture** approach, dividing the project into 
 ### Key Design Patterns:
 - **Repository Pattern**: Used to abstract the data storage and retrieval logic.
 - **Dependency Injection**: Ensures that dependencies are injected into classes, promoting testability and flexibility.
-- **Unit of Work Pattern**: Ensures that transactions are committed atomically.
 
 ## Assumptions
 
 - **Account Numbers**: Each account has a unique account number.
-- **Transactions**: All transactions (deposit, withdrawal, transfer) are synchronous.
 - **In-memory Storage**: No database is used. Data is stored in memory for the purpose of this prototype.
 
 ## How to Test
@@ -63,18 +61,3 @@ For testing, we use **xUnit** framework. To run the tests:
    ```
    dotnet test
    ```
-
-### Example of a Test:
-- Testing account creation:
-  ```csharp
-  [Fact]
-  public void CreateAccount_ShouldIncreaseAccountCount()
-  {
-      var accountService = new AccountService();
-      var initialCount = accountService.GetAllAccounts().Count;
-
-      accountService.CreateAccount("123456", 1000);
-
-      Assert.Equal(initialCount + 1, accountService.GetAllAccounts().Count);
-  }
-  ```
