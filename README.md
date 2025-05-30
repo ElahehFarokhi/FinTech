@@ -31,7 +31,7 @@ To run the project locally, follow these steps:
    dotnet run
    ```
 
-   The API will be available on `http://localhost:5001`.
+   The API will be available on `https://localhost:5001`.
 
 ## Design Decisions
 
