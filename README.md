@@ -49,7 +49,7 @@ The system follows a **Clean Architecture** approach, dividing the project into 
 
 ## Assumptions
 
-- **Account Numbers**: Each account has a unique account number.
+- **Account Numbers**: Each account has a unique account number with 10 digits.
 - **In-memory Storage**: No database is used. Data is stored in memory for the purpose of this prototype.
 
 ## How to Test
