@@ -43,7 +43,7 @@ public class ExceptionHandlingMiddleware
         {
             _logger.LogError(ex, "An unexpected error occurred.");
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            await context.Response.WriteAsJsonAsync(new { Message = "An error occurred" });
+            await context.Response.WriteAsJsonAsync(new { ex.Message });
         }
     }
 }

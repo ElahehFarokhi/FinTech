@@ -6,6 +6,7 @@ using Moq;
 using FluentAssertions;
 using FinTech.Domain.Enums;
 using FinTech.Domain.Exceptions;
+using FinTech.Application.DTOs;
 
 namespace FinTech.Tests.Services;
 
@@ -121,13 +122,21 @@ public class TransactionServiceTests
         var accountNumber = new AccountNumber("1000000000");
         var transactions = new List<Transaction>
         {
-            new Transaction(Guid.NewGuid(), new Money(100), TransactionType.Deposit, DateTime.UtcNow, accountNumber)
+            new(Guid.NewGuid(), new Money(100), TransactionType.Deposit, DateTime.UtcNow, accountNumber)
         };
 
-        _mockTransactionRepository.Setup(repo => repo.GetByFiltersAsync(accountNumber, null,null,null)).ReturnsAsync(transactions);
+        var filters = new TransactionFilters
+        {
+            AccountNumber = accountNumber,
+            FromDate = null,
+            ToDate = null,
+            Type = null
+        };
+
+        _mockTransactionRepository.Setup(repo => repo.GetByFiltersAsync(filters)).ReturnsAsync(transactions);
 
         // Act
-        var result = await _transactionService.GetTransactionsAsync(accountNumber);
+        var result = await _transactionService.GetTransactionsAsync(filters);
 
         // Assert
         result.Should().NotBeNull().And.HaveCount(1);  // Ensure there is one transaction

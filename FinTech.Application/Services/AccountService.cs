@@ -20,18 +20,18 @@ public class AccountService(IAccountRepository accountRepository) : IAccountServ
         return AccountDto.FromDomain(account);
     }
     
-    public async Task<IEnumerable<AccountDetailsDto>> GetAllAccounts()
+    public async Task<IEnumerable<AccountDto>> GetAllAccounts()
     {
         var accounts = await accountRepository.GetAllAsync();
 
-        return accounts.Select(account => AccountDetailsDto.FromDomain(account));
+        return accounts.Select(account => AccountDto.FromDomain(account));
     }
 
-    public async Task<AccountDetailsDto> GetAccount(AccountNumber accountNumber)
+    public async Task<AccountDto> GetAccount(AccountNumber accountNumber)
     {
         var account = await accountRepository.GetByIdAsync(accountNumber);
 
-        return AccountDetailsDto.FromDomain(account);
+        return AccountDto.FromDomain(account);
     }
 
 }

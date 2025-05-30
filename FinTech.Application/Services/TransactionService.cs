@@ -85,9 +85,21 @@ public class TransactionService(IAccountRepository accountRepository, ITransacti
         }
     }
 
-    public async Task<IEnumerable<TransactionDto>> GetTransactionsAsync(AccountNumber accountNumber, string? type = null, DateTime? fromDate = null, DateTime? toDate = null)
+    public async Task<IEnumerable<TransactionDto>> GetTransactionsAsync(TransactionFilters filters)
     {
-        var transactions = await transactionRepository.GetByFiltersAsync(accountNumber, type, fromDate, toDate);
+        // Validate date range
+        if (filters.FromDate > filters.ToDate)
+        {
+            throw new ArgumentException("FromDate cannot be after ToDate");
+        }
+
+        var account = await accountRepository.GetByIdAsync(filters.AccountNumber)
+?? throw new AccountNotFoundException(filters.AccountNumber.Value);
+
+        // Apply sensible default for ToDate if not provided
+        filters.ToDate ??= DateTime.UtcNow.Date.AddDays(1); // Today inclusive
+
+        var transactions = await transactionRepository.GetByFiltersAsync(filters);
         
         return transactions
             .OrderByDescending(t => t.Timestamp)
@@ -96,10 +108,6 @@ public class TransactionService(IAccountRepository accountRepository, ITransacti
 
     private async Task RollbackTransaction(Account sourceAccount, Account targetAccount, Money amount)
     {
-        sourceAccount.Deposit(amount); // Revert the withdrawal
-        await accountRepository.UpdateAsync(sourceAccount);
-
-        targetAccount.Withdraw(amount); // Revert the deposit
-        await accountRepository.UpdateAsync(targetAccount);
+        //Provide a rollback mechanism in case of failure
     }
 }

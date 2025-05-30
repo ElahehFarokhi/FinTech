@@ -23,7 +23,7 @@ public class AccountsController(IAccountService accountService, ILogger<Accounts
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(IEnumerable<AccountDetailsDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<AccountDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllAccounts()
     {
         var accounts = await accountService.GetAllAccounts();
@@ -31,7 +31,7 @@ public class AccountsController(IAccountService accountService, ILogger<Accounts
     }
 
     [HttpGet("{accountNumber}")]
-    [ProducesResponseType(typeof(AccountDetailsDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(AccountDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAccount(string accountNumber)
     {
         var account = await accountService.GetAccount(new AccountNumber(accountNumber));

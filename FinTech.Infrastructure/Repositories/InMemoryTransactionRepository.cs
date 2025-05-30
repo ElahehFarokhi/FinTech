@@ -1,4 +1,5 @@
-﻿using FinTech.Application.Interfaces;
+﻿using FinTech.Application.DTOs;
+using FinTech.Application.Interfaces;
 using FinTech.Domain.Entities;
 using FinTech.Domain.ValueObjects;
 using System;
@@ -15,17 +16,17 @@ public class InMemoryTransactionRepository : ITransactionRepository
         return Task.CompletedTask;
     }
 
-    public Task<IEnumerable<Transaction>> GetByFiltersAsync(AccountNumber accountNumber, string? type = null, DateTime? fromDate = null, DateTime? toDate = null)
+    public Task<IEnumerable<Transaction>> GetByFiltersAsync(TransactionFilters filters)
     {
         var query = _transactions
-            .Where(t => t.SourceAccount == accountNumber || t.DestinationAccount == accountNumber);
+            .Where(t => t.SourceAccount == filters.AccountNumber || t.DestinationAccount == filters.AccountNumber);
             
-        if (type != null)
-            query = query.Where(t => (int)t.Type == Int32.Parse(type)).ToList();
-        if (fromDate != null)
-            query = query.Where(t => t.Timestamp >= fromDate).ToList();
-        if (toDate != null)
-            query = query.Where(t => t.Timestamp <= toDate).ToList();
+        if (filters.Type.HasValue)
+            query = query.Where(t => t.Type == filters.Type.Value).ToList();
+        if (filters.FromDate.HasValue)
+            query = query.Where(t => t.Timestamp >= filters.FromDate.Value).ToList();
+        if (filters.ToDate.HasValue)
+            query = query.Where(t => t.Timestamp <= filters.ToDate.Value).ToList();
 
         query = query.AsEnumerable();
         return Task.FromResult(query);

@@ -6,6 +6,6 @@ namespace FinTech.Application.Interfaces;
 public interface IAccountService
 {
     Task<AccountDto> CreateAccount(string ownerName, decimal initialBalance);
-    Task<IEnumerable<AccountDetailsDto>> GetAllAccounts();
-    Task<AccountDetailsDto> GetAccount(AccountNumber accountNumber);
+    Task<IEnumerable<AccountDto>> GetAllAccounts();
+    Task<AccountDto> GetAccount(AccountNumber accountNumber);
 }
